@@ -3,7 +3,6 @@ var router = express.Router();
 
 var MongoClient = require('mongodb').MongoClient;
 var assert = require('assert');
-var ObjectId = require('mongodb').ObjectID;
 var url = 'mongodb://localhost:27017/PlayerRecord';
 
 router.get('/', function(req, res, next) {
@@ -11,7 +10,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/android', function(req, res, next) {
-    console.log(req.body);
+    console.log((new Date).toJSON() + ": Receive POST /record/android: " + req.body);
 
     MongoClient.connect(url, function(err, db) {
         assert.equal(null, err);
@@ -29,10 +28,8 @@ var upsertRecord = function(db, req, callback) {
     updateTime.setTime(req.body.updateTime);
     var record = [];
     var recordList = req.body.record.split("|");
-    console.log(recordList);
     for(var index in recordList) {
         var recordItem = recordList[index];
-        console.log(recordItem);
         var recordItemDetail = recordItem.split(",");
         var musicName = recordItemDetail[0];
         var startTime = new Date;
@@ -60,7 +57,7 @@ var upsertRecord = function(db, req, callback) {
         {upsert:true, w: 1},
         function(err, result) {
             assert.equal(err, null);
-            console.log("Inserted a document into the restaurants collection.");
+            console.log((new Date).toJSON() + ": Upsert record: " + req.body.id);
             callback();
         });
 };
