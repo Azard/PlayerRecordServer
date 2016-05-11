@@ -10,7 +10,7 @@ router.get('/', function(req, res, next) {
     res.send('respond with a resource');
 });
 
-router.post('/', function(req, res, next) {
+router.post('/android', function(req, res, next) {
     console.log(req.body);
 
     MongoClient.connect(url, function(err, db) {
