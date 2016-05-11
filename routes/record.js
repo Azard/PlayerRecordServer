@@ -10,7 +10,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/android', function(req, res, next) {
-    console.log((new Date).toJSON() + "Receive POST /record/android: " + req.body.toString());
+    console.log((new Date).toJSON() + "Receive POST /record/android: " + req.connection.remoteAddress);
 
     MongoClient.connect(url, function(err, db) {
         assert.equal(null, err);
