@@ -22,8 +22,22 @@ router.post('/android', function(req, res, next) {
     res.send("post received");
 
 });
+router.post('/ios', function(req, res, next) {
+    console.log((new Date).toJSON() + "Receive POST /record/ios: " + req.connection.remoteAddress);
+
+    MongoClient.connect(url, function(err, db) {
+        assert.equal(null, err);
+        upsertRecord(db, req, function() {
+            db.close();
+        });
+    });
+
+    res.send("post received");
+
+});
 
 var upsertRecord = function(db, req, callback) {
+    console.log(req.body)
     var updateTime = new Date;
     updateTime.setTime(req.body.updateTime);
     var record = [];
@@ -42,7 +56,7 @@ var upsertRecord = function(db, req, callback) {
             endTime: endTime
         })
     }
-
+    var favoriteList = req.body.favorite.split("|");
     db.collection('record').updateOne(
         {_id: req.body.id},
         {
@@ -52,7 +66,8 @@ var upsertRecord = function(db, req, callback) {
             dorm: req.body.dorm,
             house: req.body.house,
             updateTime: updateTime,
-            record: record
+            record: record,
+            favorite:favoriteList
         },
         {upsert:true, w: 1},
         function(err, result) {
