@@ -37,7 +37,7 @@ router.post('/ios', function(req, res, next) {
 });
 
 var upsertRecord = function(db, req, callback) {
-    console.log(req.body)
+    console.log(req.body);
     var updateTime = new Date;
     updateTime.setTime(req.body.updateTime);
     var record = [];
